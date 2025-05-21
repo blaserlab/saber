@@ -1,3 +1,3 @@
-# saber (development version)
+# saber v9000
 
-* Initial CRAN submission.
+* Initial version contains only gestalt genotyping function
