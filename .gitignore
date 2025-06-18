@@ -12,3 +12,6 @@ inst/data-raw/regenerated_git_commands.R
 *.png
 *.pdf
 .quarto
+!R/
+!R/sysdata.rda
+
