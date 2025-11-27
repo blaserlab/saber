@@ -112,7 +112,6 @@ load_gestalt_fastqs <- function(config,
     cmd <- paste0("cp ", config$samples_fp_R2[i], " ", fastq_split_R2_folder)
     message(cmd, "\n")
     system(cmd)
-    return(config)
   }
 
 
