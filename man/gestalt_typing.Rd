@@ -7,6 +7,7 @@
 gestalt_typing(
   output_folder,
   config,
+  multiplex = FALSE,
   trimmomatic_path = "/opt/Trimmomatic-0.39/trimmomatic-0.39.jar"
 )
 }

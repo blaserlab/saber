@@ -11,6 +11,7 @@
 #' @importFrom fs dir_create path
 gestalt_typing <- function(output_folder,
                            config,
+                           multiplex = FALSE,
                            trimmomatic_path = "/opt/Trimmomatic-0.39/trimmomatic-0.39.jar") {
   ts <-
     stringr::str_replace_all(Sys.time(), "[:punct:]|[:alpha:]|[:space:]", "")
@@ -22,9 +23,9 @@ gestalt_typing <- function(output_folder,
   load_gestalt_fastqs(config = cf)
   merge_read_pairs(output_folder = of, conf = cf)
   trim_reads(trimmomatic_path = tp, conf = cf)
-  run_cutadapt(conf = cf)
+  run_cutadapt(conf = cf, multiplex = multiplex)
   run_fastqc(output_folder = of)
-  align_reads(output_folder = of, conf = cf)
+  align_reads(output_folder = of)
   fix_sam_header()
   sam_to_bam(conf = cf)
   sort_and_index(output_folder = of)
@@ -33,5 +34,6 @@ gestalt_typing <- function(output_folder,
                 conf = cf,
                 data = dat)
   readr::write_csv(cf, file = fs::path(of, fs::path_file(config)))
+  fs::dir_delete(fs::dir_ls(fs::path_temp()))
 
 }

@@ -9,3 +9,8 @@
 # saber v9002
 
 * un-ignored sysdata.rda
+
+# saber v9005
+
+* added multiplexing option
+* parallelized
