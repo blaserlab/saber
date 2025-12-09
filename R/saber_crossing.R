@@ -95,24 +95,47 @@ top_n_rownames_by_column <- function(mat, n) {
 #' @keywords internal
 #' @importFrom dplyr pull filter select rename_with cross_join rowwise mutate
 #' @importFrom dplyr ungroup group_by anti_join bind_rows all_of
-rec_name <- function(input, n_top, min_match_score) {
-  # Determine reference group (first in appearance order)
-  group_order <- input |>
-    dplyr::pull(group) |>
-    unique()
+rec_name <- function(input,
+                     group_order,
+                     current_idx,
+                     n_top,
+                     min_match_score) {
+  # Base cases -------------------------------------------------------------
+  if (nrow(input) == 0L) {
+    # Nothing left to match
+    return(input[0, , drop = FALSE])
+  }
+  if (current_idx > length(group_order)) {
+    # No more reference groups to use
+    return(input[0, , drop = FALSE])
+  }
+
+  # Current reference group (fixed order from group_order)
+  ref_group <- group_order[current_idx]
 
   top_cols <- grep("^top_", names(input), value = TRUE)
 
-  # Reference ID table from the first group
+  # Reference ID table from the current reference group
   id_table <- input |>
-    dplyr::filter(group == group_order[1]) |>
+    dplyr::filter(group == ref_group) |>
     dplyr::select(first_name = sample_name, dplyr::all_of(top_cols))
 
-  # Rename reference top_* columns so we can keep both sets in the join
+  # If this reference group has no remaining samples, skip to next group
+  if (nrow(id_table) == 0L) {
+    return(rec_name(
+      input       = input,
+      group_order = group_order,
+      current_idx = current_idx + 1L,
+      n_top       = n_top,
+      min_match_score = min_match_score
+    ))
+  }
+
+  # Rename reference top_* columns so we can keep both sets in the join -----
   id_table_ref <- id_table |>
     dplyr::rename_with(\(nm) paste0(nm, "_ref"), dplyr::all_of(top_cols))
 
-  # Cross join: compare every sample to every reference sample
+  # Cross join: compare every sample to every reference sample --------------
   result <- dplyr::cross_join(input, id_table_ref) |>
     dplyr::rowwise() |>
     dplyr::mutate(
@@ -132,20 +155,22 @@ rec_name <- function(input, n_top, min_match_score) {
     dplyr::ungroup() |>
     dplyr::filter(match_score >= min_match_score)
 
-  # Remove matched samples and recurse on the remainder
+  # Remove matched samples and recurse on the remainder ---------------------
   newinput <- dplyr::anti_join(input, result, by = "sample_name")
 
-  if (nrow(newinput) == 0) {
-    # exit case: everything has been matched as well as possible
-    result
-  } else {
-    # recursive case: match remaining samples against (remaining) reference group
-    dplyr::bind_rows(
-      result,
-      rec_name(input = newinput, n_top = n_top, min_match_score = min_match_score)
+  # Collect matches from this reference group and then move to the next one
+  dplyr::bind_rows(
+    result,
+    rec_name(
+      input       = newinput,
+      group_order = group_order,
+      current_idx = current_idx + 1L,
+      n_top       = n_top,
+      min_match_score = min_match_score
     )
-  }
+  )
 }
+
 
 #' Cross-link barcoded samples across multiple \code{Saber} objects
 #'
@@ -209,8 +234,20 @@ cross_sabers <- function(saber_list,
   ) |>
     dplyr::bind_rows()
 
-  # Run recursive matcher and return summary
-  res <- rec_name(input, n_top = n_top, min_match_score = min_match_score) |>
+  # Freeze group order once, based on the order they appear in input
+  # (which reflects the order in saber_list)
+  group_order <- input |>
+    dplyr::pull(group) |>
+    unique()
+
+  # Run recursive matcher using explicit group_order and starting at index 1
+  res <- rec_name(
+    input       = input,
+    group_order = group_order,
+    current_idx = 1L,
+    n_top       = n_top,
+    min_match_score = min_match_score
+  ) |>
     dplyr::select(
       group,
       sample_name,
@@ -218,6 +255,8 @@ cross_sabers <- function(saber_list,
       dplyr::starts_with("top_"),
       match_score
     )
+
+  # Check that no sample matches more than one reference
   check <- res |>
     dplyr::count(sample_name) |>
     dplyr::pull(n)
@@ -226,7 +265,7 @@ cross_sabers <- function(saber_list,
     cli::cli_abort(
       "Some samples matched to more than one reference. Try increasing {.arg n_top} and {.arg min_match_score}, increasing the stringency of barcode calling in the Saber objects, or filtering out samples with poor barcoding."
     )
-  } else {
-    res
   }
+
+  res
 }

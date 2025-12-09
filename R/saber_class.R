@@ -1,6 +1,6 @@
 #' Saber class for filtered CRISPR barcode analyses
 #'
-#' The \code{Saber} class is an R7 object that encapsulates the results of
+#' The \code{Saber} class is an S7 object that encapsulates the results of
 #' CRISPR barcode filtering and quality control, including the filtered
 #' variant count matrix, recurrent (stereotyped) variants, per-sample and
 #' per-variant QC summaries, and the thresholds/parameters used to construct
@@ -42,7 +42,7 @@
 #' @seealso \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-#' @importFrom R7 new_class method class_character class_any class_list
+#' @importFrom S7 new_class method class_character class_any class_list
 Saber <- new_class(
   name = "Saber",
   properties = list(
@@ -78,8 +78,9 @@ Saber <- new_class(
 #' @seealso \code{\link{Saber}}, \code{\link{make.Saber}()}
 #'
 #' @keywords internal
+#' @name print
 method(print, Saber) <- function(x, ...) {
-  cat("An R7 Saber object:\n")
+  cat("An S7 Saber object:\n")
   cat("  Description:  ", x@description, "\n")
   cat("  Samples:", ncol(x@filtered_counts), "\n")
   cat("  Filtered variants:", nrow(x@filtered_counts),  "\n")
@@ -100,14 +101,15 @@ method(print, Saber) <- function(x, ...) {
 #' @seealso \code{\link{Saber}}, \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-#' @importFrom R7 new_generic method
+#' @importFrom S7 new_generic method
 barcodes <- new_generic("barcodes", "x")
 
-#' @describeIn barcodes Extract filtered barcode counts from a \code{Saber} object
+#' @rdname barcodes
 #'
 #' @param x A \code{Saber} object.
 #'
 #' @keywords internal
+#' @name barcodes
 method(barcodes, Saber) <- function(x) {
   x@filtered_counts
 }
@@ -130,11 +132,12 @@ method(barcodes, Saber) <- function(x) {
 #' @keywords internal
 sample_data <- new_generic("sample_data", "x")
 
-#' @describeIn sample_data Extract per-sample QC data from a \code{Saber} object
+#' @rdname sample_data
 #'
 #' @param x A \code{Saber} object.
 #'
 #' @keywords internal
+#' @name sample_data
 method(sample_data, Saber) <- function(x) {
   x@per_sample_qc
 }
@@ -155,11 +158,12 @@ method(sample_data, Saber) <- function(x) {
 #' @keywords internal
 variant_data <- new_generic("variant_data", "x")
 
-#' @describeIn variant_data Extract per-variant QC data from a \code{Saber} object
+#' @rdname variant_data
 #'
 #' @param x A \code{Saber} object.
 #'
 #' @keywords internal
+#' @name variant_data
 method(variant_data, Saber) <- function(x) {
   x@per_variant_qc
 }
@@ -181,11 +185,12 @@ method(variant_data, Saber) <- function(x) {
 #' @keywords internal
 blacklist <- new_generic("blacklist", "x")
 
-#' @describeIn blacklist Extract the motif/variant blacklist from a \code{Saber} object
+#' @rdname blacklist
 #'
 #' @param x A \code{Saber} object.
 #'
 #' @keywords internal
+#' @name blacklist
 method(blacklist, Saber) <- function(x) {
   x@motif_blacklist
 }

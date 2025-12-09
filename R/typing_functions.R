@@ -308,7 +308,7 @@ run_cutadapt <- function(conf,
 }
 
 
-#' @importfrom fs path_temp dir_ls path_file path
+#' @importFrom fs path_temp dir_ls path_file path
 #' @importFrom parallel mclapply detectCores
 run_fastqc <- function(output_folder,
                        multiqc_path = "/workspace/python/anaconda3/bin/multiqc",

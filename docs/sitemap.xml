@@ -6,7 +6,25 @@
 <url><loc>/deps/font-awesome-6.5.2/html/00Index.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
+<url><loc>/reference/Saber.html</loc></url>
+<url><loc>/reference/barcodes.html</loc></url>
+<url><loc>/reference/blacklist.html</loc></url>
+<url><loc>/reference/col_entropy_normalized.html</loc></url>
+<url><loc>/reference/cross_sabers.html</loc></url>
+<url><loc>/reference/estimate_barcode_collision_probs.html</loc></url>
+<url><loc>/reference/estimate_barcode_thresholds.html</loc></url>
+<url><loc>/reference/generate_present_mat.html</loc></url>
 <url><loc>/reference/gestalt_typing.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/make.Saber.html</loc></url>
+<url><loc>/reference/plot_saber_sample_qc.html</loc></url>
+<url><loc>/reference/plot_saber_variant_collision.html</loc></url>
+<url><loc>/reference/plot_saber_variant_entropy.html</loc></url>
+<url><loc>/reference/print.html</loc></url>
+<url><loc>/reference/rec_name.html</loc></url>
+<url><loc>/reference/row_entropy_normalized.html</loc></url>
+<url><loc>/reference/sample_data.html</loc></url>
+<url><loc>/reference/top_n_rownames_by_column.html</loc></url>
+<url><loc>/reference/variant_data.html</loc></url>
 </urlset>
 

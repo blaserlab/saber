@@ -14,3 +14,8 @@
 
 * added multiplexing option
 * parallelized
+
+# saber v9007
+
+* added saber object and associated functions
+* still preliminary/needs testing
