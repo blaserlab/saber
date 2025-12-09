@@ -42,8 +42,8 @@
 #' @seealso \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-#' @importFrom S7 new_class method class_character class_any class_list
-Saber <- new_class(
+#' @importFrom S7 new_class class_character class_any class_list
+Saber <- S7::new_class(
   name = "Saber",
   properties = list(
     description         = class_character,
@@ -79,7 +79,8 @@ Saber <- new_class(
 #'
 #' @keywords internal
 #' @name print
-method(print, Saber) <- function(x, ...) {
+#' @importFrom S7 method
+S7::method(print, Saber) <- function(x, ...) {
   cat("An S7 Saber object:\n")
   cat("  Description:  ", x@description, "\n")
   cat("  Samples:", ncol(x@filtered_counts), "\n")
@@ -102,7 +103,7 @@ method(print, Saber) <- function(x, ...) {
 #'
 #' @keywords internal
 #' @importFrom S7 new_generic method
-barcodes <- new_generic("barcodes", "x")
+barcodes <- S7::new_generic("barcodes", "x")
 
 #' @rdname barcodes
 #'
@@ -110,7 +111,7 @@ barcodes <- new_generic("barcodes", "x")
 #'
 #' @keywords internal
 #' @name barcodes
-method(barcodes, Saber) <- function(x) {
+S7::method(barcodes, Saber) <- function(x) {
   x@filtered_counts
 }
 
@@ -130,7 +131,7 @@ method(barcodes, Saber) <- function(x) {
 #' @seealso \code{\link{Saber}}, \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-sample_data <- new_generic("sample_data", "x")
+sample_data <- S7::new_generic("sample_data", "x")
 
 #' @rdname sample_data
 #'
@@ -138,7 +139,7 @@ sample_data <- new_generic("sample_data", "x")
 #'
 #' @keywords internal
 #' @name sample_data
-method(sample_data, Saber) <- function(x) {
+S7::method(sample_data, Saber) <- function(x) {
   x@per_sample_qc
 }
 
@@ -156,7 +157,7 @@ method(sample_data, Saber) <- function(x) {
 #' @seealso \code{\link{Saber}}, \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-variant_data <- new_generic("variant_data", "x")
+variant_data <- S7::new_generic("variant_data", "x")
 
 #' @rdname variant_data
 #'
@@ -164,7 +165,7 @@ variant_data <- new_generic("variant_data", "x")
 #'
 #' @keywords internal
 #' @name variant_data
-method(variant_data, Saber) <- function(x) {
+S7::method(variant_data, Saber) <- function(x) {
   x@per_variant_qc
 }
 
@@ -183,7 +184,7 @@ method(variant_data, Saber) <- function(x) {
 #' @seealso \code{\link{Saber}}, \code{\link{make.Saber}()}
 #'
 #' @keywords internal
-blacklist <- new_generic("blacklist", "x")
+blacklist <- S7::new_generic("blacklist", "x")
 
 #' @rdname blacklist
 #'
@@ -191,6 +192,6 @@ blacklist <- new_generic("blacklist", "x")
 #'
 #' @keywords internal
 #' @name blacklist
-method(blacklist, Saber) <- function(x) {
+S7::method(blacklist, Saber) <- function(x) {
   x@motif_blacklist
 }
