@@ -22,4 +22,3 @@ Generic accessor for retrieving the blacklist of uninformative barcodes
 \seealso{
 \code{\link{Saber}}, \code{\link{make.Saber}()}
 }
-\keyword{internal}

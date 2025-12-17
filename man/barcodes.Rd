@@ -21,4 +21,3 @@ this returns the \code{@filtered_counts} slot.
 \seealso{
 \code{\link{Saber}}, \code{\link{make.Saber}()}
 }
-\keyword{internal}

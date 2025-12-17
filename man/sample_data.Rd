@@ -23,4 +23,3 @@ a \code{Saber} object. For \code{Saber}, this returns the
 \seealso{
 \code{\link{Saber}}, \code{\link{make.Saber}()}
 }
-\keyword{internal}

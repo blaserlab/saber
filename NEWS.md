@@ -19,3 +19,8 @@
 
 * added saber object and associated functions
 * still preliminary/needs testing
+
+# saber v9008
+
+* removed saber crossing
+* exported getter methods

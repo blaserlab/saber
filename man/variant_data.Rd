@@ -21,4 +21,3 @@ Generic accessor for retrieving variant-level QC statistics from a
 \seealso{
 \code{\link{Saber}}, \code{\link{make.Saber}()}
 }
-\keyword{internal}

@@ -1,0 +1,86 @@
+# Selecting Amplicon Barcodes using Experimental Replicates
+
+The *saber* package provides functions for genotyping GESTALT barcodes,
+barcode quality control, and quantifying barcodes from an experiment
+with dozens of samples or more.
+
+This is an updated/modernized version of the code published in
+
+Teets, E.M., et al., Quantifying Hematopoietic Stem Cell Clonal
+Diversity by Selecting Informative Amplicon Barcodes. Sci Rep, 2020.
+10(1): p. 2153.
+
+Currently only the GESTALT genotyping function is implemented in this
+package.
+
+## Installation
+
+You can install saber like so:
+
+``` r
+pak::pkg_install("blaserlab/saber")
+```
+
+## Genotyping Bulk Gestalt Amplicon Data
+
+You need to generate a configuration file in csv format. Columns should
+be:
+
+    sample,group,sample_fp_1,sample_fp_2
+
+Where group can identify your experimental group or be “not_applicable”,
+but must be a character string. “samples_fp_1” and “samples_fp_2” are
+the file paths to the R1 and R2 fastq files for that sample.
+
+A blank config file can be found by running:
+
+``` r
+fs::path_package(package = "saber", "extdata", "gestalt_config.csv")
+```
+
+Then run:
+
+``` r
+library(saber)
+
+gestalt_typing(config = "<path/to/config/file>", output_folder = "<path/to/output>")
+```
+
+# Package index
+
+## All functions
+
+- [`barcodes()`](barcodes.md) :
+
+  Extract filtered barcode count matrix from a `Saber` object
+
+- [`blacklist()`](blacklist.md) :
+
+  Extract motif/variant blacklist from a `Saber` object
+
+- [`gestalt_typing()`](gestalt_typing.md) : Type Gestalt Barcoding DAta
+
+- [`make.Saber()`](make.Saber.md) :
+
+  Construct a `Saber` object from CRISPR barcode data
+
+- [`plot_saber_sample_qc()`](plot_saber_sample_qc.md) :
+
+  Sample-level QC plot for a `Saber` object
+
+- [`plot_saber_variant_collision()`](plot_saber_variant_collision.md) :
+
+  Variant collision risk plot for a `Saber` object
+
+- [`plot_saber_variant_entropy()`](plot_saber_variant_entropy.md) :
+
+  Variant recurrence vs entropy diagnostic plot for a `Saber` object
+
+- [`sample_data()`](sample_data.md) :
+
+  Extract per-sample QC data from a `Saber` object
+
+- [`variant_data()`](variant_data.md) :
+
+  Extract per-variant QC data from a `Saber` object
+
