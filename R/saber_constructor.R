@@ -297,8 +297,7 @@ estimate_barcode_collision_probs <- function(count_mat, count_thresh, freq_thres
     p_sample_present   = p_hat,
     lambda_per_sample  = lambda,
     P_ge2_per_sample   = P_ge2,
-    P_ge2_given_present = P_ge2_given_ge1,
-    stringsAsFactors   = FALSE
+    P_ge2_given_present = P_ge2_given_ge1
   )
 }
 
@@ -571,8 +570,7 @@ make.Saber <- function(crispr_set,
     ),
     unique_barcodes_kept   = unique_per_sample,
     entropy_all            = sample_entropy_all,
-    entropy_after_filter   = sample_entropy_keep,
-    stringsAsFactors = FALSE
+    entropy_after_filter   = sample_entropy_keep
   )
 
   # Motif/variant blacklist for upstream filtering

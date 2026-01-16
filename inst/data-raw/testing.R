@@ -1,5 +1,9 @@
 source("inst/data-raw/dependencies.R")
 library(S7)
+conflicted::conflicts_prefer(base::intersect)
+conflicted::conflicts_prefer(dplyr::rename)
+conflicted::conflicts_prefer(dplyr::count)
+conflicted::conflicts_prefer(dplyr::filter)
 devtools::load_all()
 
 load("~/network/X/labs/Blaser/staff/ngs_archive/gestalt_DP/analysis_20251202155739785562/crispr_set.rda")
@@ -43,13 +47,14 @@ rownames(barcodes(res_DZ)))
 new_rownames
 dim(barcodes(res_DP)[new_rownames,])
 dim(barcodes(res_DZ)[new_rownames,])
-dp_dz_cor <- cor(cbind(barcodes(res_DP)[new_rownames,],
+dp_dz_cor0 <- cor(cbind(barcodes(res_DP)[new_rownames,],
           (barcodes(res_DZ)[new_rownames,])))
-dp_dz_sh <- SummarizedHeatmap(dp_dz_cor)
-bb_plot_heatmap_main(dp_dz_sh)
-dp_dz_dist <- dist(t(cbind(barcodes(res_DP)[new_rownames,],
-           (barcodes(res_DZ)[new_rownames,]))))
-
+dp_dz_sh0 <- SummarizedHeatmap(dp_dz_cor0)
+bb_plot_heatmap_main(dp_dz_sh0) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+# dp_dz_dist <- dist(t(cbind(barcodes(res_DP)[new_rownames,],
+#            (barcodes(res_DZ)[new_rownames,]))))
+dp_dz_dist <- dist(t(scale(cbind(barcodes(res_DP)[new_rownames,],
+                                 (barcodes(res_DZ)[new_rownames,])))))
 fish_ids <- dp_dz_dist |>
   as.matrix() |>
   as_tibble(rownames = "sample") |>
@@ -68,6 +73,26 @@ fish_ids <- dp_dz_dist |>
   ungroup()
 fish_ids
 
+list() |> length()
+
+str(res_DP)
+
+res_list <- list(t3mo = res_DP, t6mo = res_DZ)
+res_list
+
+tibble( = colnames(barcodes(res_DP)))
+
+
+
+res <- cross_sabers(res_list)
+res
+res |> filter(!is.na(t6mo))
+
+dp_dz_cor1 <- cor(cbind(barcodes(res_DP)[new_rownames,fish_ids$DP],
+          (barcodes(res_DZ)[new_rownames,fish_ids$DZ])))
+
+dp_dz_sh1 <- SummarizedHeatmap(dp_dz_cor1)
+bb_plot_heatmap_main(dp_dz_sh1) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 entropy_DP <- sample_data(res_DP) |>
   select(sample_name = sample, entropy_DP = entropy_after_filter, frk_DP = frac_reads_kept)
@@ -89,20 +114,18 @@ entropy_data <- left_join(fish_ids, entropy_DP, by = join_by(DP == sample_name))
   rename(DZ_genotype = hgfa_genotype) |>
   filter(DP_genotype == DZ_genotype) |>
   pivot_longer(c(entropy_DP, entropy_DZ), names_to = "timepoint", values_to = "entropy") |>
-  # filter(frk_DP > 0.2) |>
-  # filter(frk_DZ > 0.2) |>
+  filter(frk_DP > 0.25) |>
+  filter(frk_DZ > 0.25) |>
   group_by(true_id) |>
   mutate(n = n()) |>
   filter(n == 2) |>
   ungroup()
-
 
 ggplot(entropy_data |> filter(timepoint == "entropy_DP"), aes(x = frk_DP, y = entropy)) +
   geom_point()
 ggplot(entropy_data |> filter(timepoint == "entropy_DZ"), aes(x = frk_DZ, y = entropy)) +
   geom_point()
 
-entropy_data$frk_DP |> range()
 
 ggplot(entropy_data, aes(x = DP_genotype, y = entropy)) +
   geom_jitter() +
@@ -123,12 +146,23 @@ emmeans(m, ~ DZ_genotype | timepoint)          # genotype at each timepoint
 pvals <- contrast(emmeans(m, ~ DZ_genotype | timepoint), "pairwise") |> as_tibble()
 pvals
 
+devtools::load_all()
+# x is a named list of Saber objects, ordered by timepoint
+mapping <- cross_sabers(res_list)
+mapping
+# Simple presence/absence heatmap
+plot_cross_sabers_heatmap(mapping)
 
-ggplot(hgfa_gestalt_entropy_data, aes(x = genotype, y = entropy)) +
-  geom_jitter() +
-  geom_violin() +
-  stat_stars_facet(stat_df = pvals,
-                   time_col = "timepoint",
-                   aes(time_panel = timepoint),
-                   p_col = "p.value") +
-  facet_wrap(~timepoint)
+# Same, but with sample IDs printed in tiles
+plot_cross_sabers_heatmap(mapping, show_labels = TRUE)
+
+devtools::load_all()
+test <- saber_cor(res_list, mapping = mapping |> filter(!is.na(t6mo)))
+test_sh <- SummarizedHeatmap(test)
+bb_plot_heatmap_main(test_sh)
+
+glimpse(test)
+dim(test)
+
+remove_na(c(mapping$t3mo, mapping$t6mo))
+replace_na(c(mapping$t3mo, mapping$t6mo), replace = character(0))

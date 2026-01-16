@@ -1,6 +1,6 @@
 Package: saber
 Title: Selecting Amplicon Barcodes from Experimental Replicates
-Version: 0.0.0.9008
+Version: 0.0.0.9009
 Authors@R: 
     person(given = "Brad",
            family = "Blaser",

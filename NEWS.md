@@ -24,3 +24,7 @@
 
 * removed saber crossing
 * exported getter methods
+
+# saber v9009
+
+* new distance-based saber crossing

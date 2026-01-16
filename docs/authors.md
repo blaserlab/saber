@@ -10,14 +10,14 @@
 Source:
 [`DESCRIPTION`](https://github.com/blaserlab/saber/blob/HEAD/DESCRIPTION)
 
-Blaser B (2025). *saber: Selecting Amplicon Barcodes from Experimental
-Replicates*. R package version 0.0.0.9008,
+Blaser B (2026). *saber: Selecting Amplicon Barcodes from Experimental
+Replicates*. R package version 0.0.0.9009,
 <https://github.com/blaserlab/saber>.
 
     @Manual{,
       title = {saber: Selecting Amplicon Barcodes from Experimental Replicates},
       author = {Brad Blaser},
-      year = {2025},
-      note = {R package version 0.0.0.9008},
+      year = {2026},
+      note = {R package version 0.0.0.9009},
       url = {https://github.com/blaserlab/saber},
     }
